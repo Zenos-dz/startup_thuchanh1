@@ -1,0 +1,17 @@
+﻿@using startup.Models;
+@using startup.Utilities;
+@model IList<Post>
+
+<div class="mb-5 wow slideInUp" data-wow-delay="0.1s">
+    <div class="section-title section-title-sm position-relative pb-3 mb-4">
+        <h3 class="mb-0">Recent Post</h3>
+    </div>
+    @foreach(var item in Model)
+    {
+        string url = Functions.TitleSlugGeneration("post", item.Title, item.PostID);
+        <div class="d-flex rounded overflow-hidden mb-3">
+            <img class="img-fluid" src="@item.Images" style="width: 100px; height: 100px; object-fit: cover;" alt="">
+            <a href="/@url" class="h5 fw-semi-bold d-flex align-items-center bg-light px-3 mb-0">@item.Title</a>
+        </div>
+    }
+</div>
