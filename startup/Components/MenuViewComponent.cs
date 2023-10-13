@@ -6,7 +6,7 @@ namespace startup.Components
     [ViewComponent(Name = "MenuView")]
     public class MenuViewComponent : ViewComponent
     {
-        private DataContext _context;
+        private readonly DataContext _context;
         public MenuViewComponent(DataContext context)
         {
             _context = context;

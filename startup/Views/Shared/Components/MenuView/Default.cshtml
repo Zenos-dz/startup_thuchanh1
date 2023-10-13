@@ -1,4 +1,5 @@
-﻿@model IList<Menu>
+﻿@using startup.Utilities
+@model IList<Menu>
 <!-- Navbar & Carousel Start -->
 <div class="container-fluid position-relative p-0">
     <nav class="navbar navbar-expand-lg navbar-dark px-5 py-3 py-lg-0">
@@ -12,21 +13,31 @@
             <div class="navbar-nav ms-auto py-0">
                 @foreach (var menu in Model.Where(menu => menu.Levels ==1).OrderBy(Menu => Menu.MenuOrder))
                 {
-                    var id = menu.MenuId;
-                    var sMenu = Model.Where(p => p.ParentID == id).OrderBy(p => p.MenuOrder).ToList();
+                    var Pid = menu.MenuId;
+                    string url = Functions.TitleSlugGeneration("list", menu.MenuName, menu.MenuId);
+                    if( !string.IsNullOrEmpty(menu.Link))
+                    {
+                        url = menu.Link;
+                    }
+                    var sMenu = Model.Where(p => p.ParentID == Pid).OrderBy(p => p.MenuOrder).ToList();
 
                     @if (sMenu.Count == 0)
                     {
-                        <a href="index.html" class="nav-item nav-link">@menu.MenuName</a>
+                        <a href="/@url" class="nav-item nav-link">@menu.MenuName</a>
                     }
                     else
                     {
                         <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">@menu.MenuName</a>
+                            <a href="/@url" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">@menu.MenuName</a>
                             <div class="dropdown-menu m-0">
                                 @foreach (var smn in sMenu)
                                 {
-                                    <a href="blog.html" class="dropdown-item">@smn.MenuName</a>
+                                    string url1 = Functions.TitleSlugGeneration("list", smn.MenuName, smn.MenuId);
+                                    if( !string.IsNullOrEmpty(smn.Link))
+                                    {
+                                        url1 = smn.Link;
+                                    }
+                                    <a href="@url1" class="dropdown-item">@smn.MenuName</a>
                                 }
                             </div>
                         </div>
