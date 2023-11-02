@@ -72,5 +72,45 @@ namespace startup.Areas.Admin.Controllers
 			}
 			return View(mn);
 		}
-	}
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var mn = _context.Menus.Find(id);
+            if (mn == null)
+            {
+                return NotFound();
+            }
+
+            var mnList = (from m in _context.Menus
+                          select new SelectListItem()
+                          {
+                              Text = m.MenuName,
+                              Value = m.MenuId.ToString(),
+                          }).ToList();
+            mnList.Insert(0, new SelectListItem()
+            {
+                Text = "----Select----",
+                Value = String.Empty
+            });
+            ViewBag.mnList = mnList;
+
+            return View(mn);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Menu mn)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Menus.Update(mn);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(mn);
+        }
+    }
 }
